@@ -1,0 +1,13 @@
+<header class="w-full bg-gray-800 text-white p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold"><a href="/">brutalBaby-web3.0</a></h1>
+    <nav>
+        <ul class="flex space-x-4">
+            <% if (user) { %>
+                <li><a href="/profile" class="hover:underline">Profile</a></li>
+                <li><a href="/logout" class="hover:underline">Logout</a></li>
+            <% } else { %>
+                <li><a href="/login" class="hover:underline">Login</a></li>
+            <% } %>
+        </ul>
+    </nav>
+</header>

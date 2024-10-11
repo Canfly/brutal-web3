@@ -1,0 +1,66 @@
+<!-- views/login.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - brutalBaby-web3.0</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <%- include('partials/header') %>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white shadow-lg rounded-lg p-8">
+            <h1 class="text-2xl font-bold text-center mb-6">Login with Web3</h1>
+            <form id="loginForm" class="space-y-4">
+                <input type="text" id="name" name="name" placeholder="Enter your name (optional)" class="w-full p-2 border rounded-md">
+                <button type="button" id="connectWallet" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Connect Wallet</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <%- include('partials/footer') %>
+
+    <!-- Подключаем Ethers.js и скрипт для подключения кошелька -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+    <script>
+        document.getElementById('connectWallet').addEventListener('click', async () => {
+            const name = document.getElementById('name').value;
+
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    // Запрашиваем доступ к кошельку
+                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                    const address = accounts[0];
+                    
+                    // Отправляем адрес и имя на сервер для логина
+                    const response = await fetch('/api/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ address, name })
+                    });
+
+                    if (response.ok) {
+                        // Перенаправляем пользователя на страницу профиля
+                        window.location.href = '/profile';
+                    } else {
+                        const data = await response.json();
+                        alert(data.error || 'Login failed');
+                    }
+                } catch (error) {
+                    console.error('Error connecting wallet:', error);
+                    alert('Failed to connect wallet');
+                }
+            } else {
+                alert('Please install MetaMask!');
+            }
+        });
+    </script>
+</body>
+</html>

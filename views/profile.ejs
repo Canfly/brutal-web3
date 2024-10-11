@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - brutalBaby-web3.0</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <%- include('partials/header', { user }) %>
+
+    <!-- Main Content -->
+    <main class="flex-grow p-4">
+        <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-8">
+            <h1 class="text-2xl font-bold mb-4">Welcome, <%= user.name || 'User' %></h1>
+            <p><strong>Address:</strong> <%= user.address %></p>
+
+            <h2 class="text-xl mt-6 mb-2">Your Pages</h2>
+            <ul class="list-disc pl-5 mb-6">
+                <% if (pages.length > 0) { %>
+                    <% pages.forEach(page => { %>
+                        <li><a href="/page/<%= page.id %>" class="text-blue-500 hover:underline"><%= page.title %></a></li>
+                    <% }) %>
+                <% } else { %>
+                    <li>No pages created yet.</li>
+                <% } %>
+            </ul>
+
+            <h2 class="text-xl mb-2">Create New Page</h2>
+            <form action="/profile/create-page" method="POST" class="flex space-x-2">
+                <input type="text" name="title" placeholder="Page Title" required class="flex-grow p-2 border rounded-md">
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Create</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <%- include('partials/footer') %>
+</body>
+</html>
